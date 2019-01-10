@@ -31,6 +31,17 @@ var data = {
   }
 };
 
+// Identify who has the most followers over 30
+function mostFollowersOver30(socialData){
+  var oldFollowers = [];
+  return nameFinder(oldFollowers, socialData);
+}
+console.log("Who has the most followers over 30?", mostFollowersOver30(data));
+
+// List those who follow someone that doesn't follow them back
+// List everyone and their reach (sum of # of followers and # of followers of followers)
+
+
 // Identify who follows the most people
 function followsTheMostPeople (socialData) {
   var max = 0;
@@ -76,7 +87,7 @@ function mostFollowsOver30 (socialData) {
       persons.push(key);
     }
   }
-  return nameFinder(persons);
+  return nameFinder(persons, socialData);
 }
 console.log("Who follows the most people over 30?", mostFollowsOver30(data));
 
@@ -94,6 +105,25 @@ function summaryList (socialData) {
   return summary;
 }
 console.log("Who follows whom, and who follows them?", summaryList(data));
+
+// Identify who has the most followers
+function mostFollowers(socialData) {
+  var obj = numberOfFollowers(socialData);
+  var max = 0;
+  for (var key in obj) {
+    if (obj[key] > max) {
+      max = obj[key];
+    }
+  }
+  var persons = [];
+  for (var key in obj) {
+    if(obj[key] === max) {
+      persons.push(key);
+    }
+  }
+return nameFinder(persons, socialData);
+}
+console.log("Who has the most followers?", mostFollowers(data));
 
 // HELPER for summaryList()
 function followersNames (pId, socialData) {
@@ -126,24 +156,6 @@ function followedBy(pId, socialData) {
   return followedByNames;
 }
 
-// Identify who has the most followers
-function mostFollowers(socialData) {
-  var obj = numberOfFollowers(socialData);
-  var max = 0;
-  for (var key in obj) {
-    if (obj[key] > max) {
-      max = obj[key];
-    }
-  }
-  var persons = [];
-  for (var key in obj) {
-    if(obj[key] === max) {
-      persons.push(key);
-    }
-  }
-return nameFinder(persons);
-}
-console.log("Who has the most followers?", mostFollowers(data));
 
 // HELPER for mostFollowers()
 function numberOfFollowers(socialData) {
@@ -164,11 +176,11 @@ function numberOfFollowers(socialData) {
 }
 
 // HELPER - take array of ids and return list of names
-function nameFinder(arrOfIds){
+function nameFinder(arrOfIds, salesData){
   var foundNames = '';
   for (var i = 0; i < arrOfIds.length; i++) {
     var foundId = arrOfIds[i];
-    var foundName = data[foundId].name;
+    var foundName = salesData[foundId].name;
     if (i < arrOfIds.length - 2){
       foundNames = foundNames + foundName + ", ";
     } else if (i < arrOfIds.length - 1) {
@@ -180,6 +192,3 @@ function nameFinder(arrOfIds){
   return foundNames;
 }
 
-//Identify who has the most followers over 30
-// List those who follow someone that doesn't follow them back
-// List everyone and their reach (sum of # of followers and # of followers of followers)
