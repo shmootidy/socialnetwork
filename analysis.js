@@ -76,7 +76,7 @@ function mostFollowsOver30 (socialData) {
       persons.push(key);
     }
   }
-return persons;
+  return nameFinder(persons);
 }
 console.log("Who follows the most people over 30?", mostFollowsOver30(data));
 
@@ -93,7 +93,6 @@ function summaryList (socialData) {
   }
   return summary;
 }
-
 console.log("Who follows whom, and who follows them?", summaryList(data));
 
 // HELPER for summaryList()
@@ -136,14 +135,13 @@ function mostFollowers(socialData) {
       max = obj[key];
     }
   }
-
   var persons = [];
   for (var key in obj) {
     if(obj[key] === max) {
       persons.push(key);
     }
   }
-return persons;
+return nameFinder(persons);
 }
 console.log("Who has the most followers?", mostFollowers(data));
 
@@ -165,7 +163,22 @@ function numberOfFollowers(socialData) {
   return obj;
 }
 
-
+// HELPER - take array of ids and return list of names
+function nameFinder(arrOfIds){
+  var foundNames = '';
+  for (var i = 0; i < arrOfIds.length; i++) {
+    var foundId = arrOfIds[i];
+    var foundName = data[foundId].name;
+    if (i < arrOfIds.length - 2){
+      foundNames = foundNames + foundName + ", ";
+    } else if (i < arrOfIds.length - 1) {
+      foundNames = foundNames + foundName;
+    } else {
+      foundNames = foundNames + " and " + foundName + ".";
+    }
+  }
+  return foundNames;
+}
 
 //Identify who has the most followers over 30
 // List those who follow someone that doesn't follow them back
