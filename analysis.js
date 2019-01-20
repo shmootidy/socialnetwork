@@ -31,30 +31,35 @@ const data = {
   }
 };
 
-// Identify who has the most followers over 30
-function mostFollowersOver30(socialData){ // THIS IS INCOMPLETE!
-  const oldFollowersArr = whoFollowsOldPeople(socialData);
-  for (let i = 0; i < oldFollowersArr.length; i++) {
-    const oldFollowers = oldFollowersArr[i];
-  }
-}
-console.log("Who has the most followers over 30?", mostFollowersOver30(data));
 
-function whoFollowsOldPeople(socialData){ // doesn't work
-  const oldFollowers = [];
-  const oldUsers = whosOld(socialData);
-  oldUsers.forEach(function(oldUser){
-    for (const id in socialData){
-      socialData[id].follows.forEach(function(oldFollower){
-        if (oldFollower == oldUser){
-          oldFollowers.push(id);
-        }
-      });
+
+// Identify who has the most followers over 30
+function whoHasMostFollowersOver30(socialData) { // works
+  const oldUsersKeys = whosOld(socialData); // arr
+  const oldUsersObj = {};                   // obj
+  for (const user in socialData) {
+    for (const oldUser of oldUsersKeys) {
+      if (user === oldUser) {
+        oldUsersObj[user] = socialData[user];
+      }
     }
-  })
-  return oldFollowers;
+  }
+  const numberOfFollowers = howManyFollowers(oldUsersObj); // obj
+  let mostFollowers = 0;
+  for (const key in numberOfFollowers) {
+    if (numberOfFollowers[key] > mostFollowers) {
+      mostFollowers = numberOfFollowers[key];
+    }
+  }
+  const persons = [];
+  for (const key in numberOfFollowers) {
+    if (numberOfFollowers[key] === mostFollowers) {
+      persons.push(key);
+    }
+  }
+  return nameFinder(persons, socialData);
 }
-console.log(whoFollowsOldPeople("who follows old people?", data));
+console.log("Who has the most followers over 30?", whoHasMostFollowersOver30(data));
 
 
 // Identify who follows the most people
@@ -123,20 +128,21 @@ function summaryList (socialData) { // works - but output could be made prettier
 
 // Identify who has the most followers
 function mostFollowers(socialData) { // works
-  const obj = numberOfFollowers(socialData);
-  let max = 0;
-  for (const key in obj) {
-    if (obj[key] > max) {
-      max = obj[key];
+  const numberOfFollowers = howManyFollowers(socialData); // obj
+  let mostFollowers = 0;
+  for (const key in numberOfFollowers) {
+    if (numberOfFollowers[key] > mostFollowers) {
+      mostFollowers = numberOfFollowers[key];
     }
   }
+
   const persons = [];
-  for (const key in obj) {
-    if(obj[key] === max) {
+  for (const key in numberOfFollowers) {
+    if (numberOfFollowers[key] === mostFollowers) {
       persons.push(key);
     }
   }
-return nameFinder(persons, socialData);
+  return nameFinder(persons, socialData);
 }
 // console.log("Who has the most followers?", mostFollowers(data));
 
@@ -173,7 +179,7 @@ function followedBy(pId, socialData) {
 
 
 // HELPER for mostFollowers()
-function numberOfFollowers(socialData) {
+function howManyFollowers(socialData) {
   const obj = {};
   for (const id in socialData){
     const follows = socialData[id].follows;
@@ -183,7 +189,7 @@ function numberOfFollowers(socialData) {
         obj[id] = 1;
       }
       else{
-        obj[id]++;
+        obj[id] += 1;
       }
     }
   }
@@ -221,6 +227,7 @@ function whosOld(socialData){
 
 // List those who follow someone that doesn't follow them back
 // List everyone and their reach (sum of # of followers and # of followers of followers)
+
 module.exports = {
   mostFollowersOver30,
   whoFollowsOldPeople,
