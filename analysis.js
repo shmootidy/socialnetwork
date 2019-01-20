@@ -40,7 +40,7 @@ function mostFollowersOver30(socialData){ // THIS IS INCOMPLETE!
 }
 console.log("Who has the most followers over 30?", mostFollowersOver30(data));
 
-function whoFollowsOldPeople(socialData){
+function whoFollowsOldPeople(socialData){ // doesn't work
   const oldFollowers = [];
   const oldUsers = whosOld(socialData);
   oldUsers.forEach(function(oldUser){
@@ -54,14 +54,13 @@ function whoFollowsOldPeople(socialData){
   })
   return oldFollowers;
 }
-
-// console.log(whoFollowsOldPeople(data));
+console.log(whoFollowsOldPeople("who follows old people?", data));
 
 
 // Identify who follows the most people
-function followsTheMostPeople (socialData) {
-  const max = 0;
-  const maxPerson = "";
+function followsTheMostPeople (socialData) { // works
+  let max = 0;
+  let maxPerson = "";
   for (const id in socialData) {
     const numberFollows = socialData[id].follows.length;
     if (numberFollows > max) {
@@ -74,9 +73,9 @@ function followsTheMostPeople (socialData) {
 // console.log("Who follows the most people?", followsTheMostPeople(data));
 
 // Identify who follows the most over 30
-function mostFollowsOver30 (socialData) {
+function mostFollowsOver30 (socialData) { // works - but code could be refactored
   const obj = {};
-  const maxPerson30 = "";
+  let maxPerson30 = "";
   for (const id in socialData){
     const follows = socialData[id].follows;
     for (let i = 0; i < follows.length; i++) {
@@ -91,7 +90,7 @@ function mostFollowsOver30 (socialData) {
       }
     }
   }
-  const max = 0;
+  let max = 0;
   for (const key in obj) {
     if (obj[key] > max) {
       max = obj[key];
@@ -109,7 +108,7 @@ function mostFollowsOver30 (socialData) {
 
 
 // List everyone and for each of them, list the names of who they follow and who follows them
-function summaryList (socialData) {
+function summaryList (socialData) { // works - but output could be made prettier
   const summary = {};
   for(const id in socialData) {
     const name = socialData[id].name;
@@ -123,9 +122,9 @@ function summaryList (socialData) {
 // console.log("Who follows whom, and who follows them?", summaryList(data));
 
 // Identify who has the most followers
-function mostFollowers(socialData) {
+function mostFollowers(socialData) { // works
   const obj = numberOfFollowers(socialData);
-  const max = 0;
+  let max = 0;
   for (const key in obj) {
     if (obj[key] > max) {
       max = obj[key];
@@ -142,7 +141,7 @@ return nameFinder(persons, socialData);
 // console.log("Who has the most followers?", mostFollowers(data));
 
 // HELPER for summaryList()
-function followersNames (pId, socialData) {
+function followersNames (pId, socialData) { //
   const follows = socialData[pId].follows;
   const namesFollows = [];
   for (let i = 0; i < follows.length; i++) {
@@ -193,7 +192,7 @@ function numberOfFollowers(socialData) {
 
 // HELPER - take array of ids and return list of names
 function nameFinder(arrOfIds, socialData){
-  const foundNames = '';
+  let foundNames = '';
   for (let i = 0; i < arrOfIds.length; i++) {
     const foundId = arrOfIds[i];
     const foundName = socialData[foundId].name;
