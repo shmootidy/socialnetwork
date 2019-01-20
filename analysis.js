@@ -32,6 +32,28 @@ const data = {
 };
 
 
+// List everyone and their reach (sum of # of followers and # of followers of followers)
+function whatsTheirReach(socialData) {
+  let results = '';
+  let number = 0;
+  const whoFollowsWhom = summaryList(socialData); // obj
+  for (const who in whoFollowsWhom) {
+    number = followerCounter(who, whoFollowsWhom);
+    for (const followed in whoFollowsWhom[who].follows) {
+      number = number + followerCounter(whoFollowsWhom[who].follows[followed], whoFollowsWhom);
+    }
+    results = results + '\n' + who + '\'s reach is ' + number;
+  }
+  return results;
+}
+
+function followerCounter(userName, whoFollowsWhom) {
+  let count = 0;
+  count = whoFollowsWhom[userName].follows.length;
+  return count;
+}
+
+console.log("What's everyone's reach?", whatsTheirReach(data));
 
 // List those who follow someone that doesn't follow them back
 function whoIsNotFollowedBack(socialData) {
@@ -58,7 +80,7 @@ function whoIsNotFollowedBack(socialData) {
   return isNotFollowedBack;
 }
 
-console.log('The following people are not followed back by someone they follow:', whoIsNotFollowedBack(data) + '. That is all.');
+// console.log('The following people are not followed back by someone they follow:', whoIsNotFollowedBack(data) + '. That is all.');
 
 // Identify who has the most followers over 30
 function whoHasMostFollowersOver30(socialData) { // works
@@ -252,7 +274,6 @@ function whosOld(socialData){
 }
 
 
-// List everyone and their reach (sum of # of followers and # of followers of followers)
 
 module.exports = {
   whoHasMostFollowersOver30,
