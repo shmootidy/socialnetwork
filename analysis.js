@@ -33,6 +33,33 @@ const data = {
 
 
 
+// List those who follow someone that doesn't follow them back
+function whoIsNotFollowedBack(socialData) {
+  let isNotFollowedBack = '';
+  const whoFollowsWhom = summaryList(socialData); // obj
+  for (const who in whoFollowsWhom) {
+    const followingBackIndex = [];
+    const user = whoFollowsWhom[who];
+    for (const followeeIndex in user.follows) {
+      whoFollowsWhom[who].followedBy.forEach((follower) => {
+        if (user.follows[followeeIndex] === follower) {
+          followingBackIndex.push(followeeIndex);
+        }
+      });
+    }
+    if (followingBackIndex.length < 1) {
+      if (isNotFollowedBack) {
+        isNotFollowedBack = isNotFollowedBack + ", " + who;
+      } else {
+        isNotFollowedBack = who;
+      }
+    }
+  }
+  return isNotFollowedBack;
+}
+
+console.log('The following people are not followed back by someone they follow:', whoIsNotFollowedBack(data) + '. That is all.');
+
 // Identify who has the most followers over 30
 function whoHasMostFollowersOver30(socialData) { // works
   const oldUsersKeys = whosOld(socialData); // arr
@@ -59,7 +86,7 @@ function whoHasMostFollowersOver30(socialData) { // works
   }
   return nameFinder(persons, socialData);
 }
-console.log("Who has the most followers over 30?", whoHasMostFollowersOver30(data));
+// console.log("Who has the most followers over 30?", whoHasMostFollowersOver30(data));
 
 
 // Identify who follows the most people
@@ -147,7 +174,7 @@ function mostFollowers(socialData) { // works
 // console.log("Who has the most followers?", mostFollowers(data));
 
 // HELPER for summaryList()
-function followersNames (pId, socialData) { //
+function followersNames (pId, socialData) {
   const follows = socialData[pId].follows;
   const namesFollows = [];
   for (let i = 0; i < follows.length; i++) {
@@ -225,19 +252,17 @@ function whosOld(socialData){
 }
 
 
-// List those who follow someone that doesn't follow them back
 // List everyone and their reach (sum of # of followers and # of followers of followers)
 
 module.exports = {
-  mostFollowersOver30,
-  whoFollowsOldPeople,
+  whoHasMostFollowersOver30,
   followsTheMostPeople,
   mostFollowsOver30,
   summaryList,
   mostFollowers,
   followersNames,
   followedBy,
-  numberOfFollowers,
+  howManyFollowers,
   nameFinder,
   whosOld,
 }
